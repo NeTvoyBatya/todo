@@ -1,0 +1,54 @@
+{
+    "defaultTheme":
+        {
+            "name": "Default Theme",
+            "type": "light",
+            "colors": [
+                "0xFF40C4FF",
+                "0xAA1976D2",
+                "0xFF2196F3",
+                "0xFFFFFFFF",
+                "0xFF000000",
+                "0x8A000000"
+            ]
+        },
+    "lightCreamTheme":
+        {
+            "name": "Light Cream Theme",
+            "type": "light",
+            "colors": [
+                "0xFFEE6C4D",
+                "0xFF3D5A80", 
+                "0xFF98C1D9",
+                "0xFFE0FBFC",
+                "0xFF293241",
+                "0xCC414a59"
+            ]
+        },
+    "darkCreamTheme":
+        {
+            "name": "Dark Cream Theme",
+            "type": "dark",
+            "colors": [
+                "0xFF22333B",
+                "0xFF5E503F", 
+                "0xFFC6AC8F",
+                "0xFF0A0908",
+                "0xFFEAE0D5",
+                "0xCCbfbab4"
+            ]
+        },
+    "darkGoldTheme":
+        {
+            "name": "Dark Gold Theme",
+            "type": "dark",
+            "colors": [
+                "0xFF233237",
+                "0xFF62342D", 
+                "0xFF954c43",
+                "0xFF18121e",
+                "0xFFe9c87b",
+                "0xCCe9c87b"
+            ]
+        }
+    }

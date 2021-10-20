@@ -1,0 +1,55 @@
+{
+    "home":
+        {
+            "themeDeleted": "Тема %themeName% удалена",
+            "themeDeletedUndo": "Отменить",
+            "chooseTheme": "Выберите тему",
+            "createCustomTheme": "Создать свою тему",
+            "mainColorName": "Основной Цвет",
+            "mainShadeColorName": "Основной Тёмный Цвет",
+            "secondaryColorName": "Дополнительный Цвет",
+            "backgroundColorName": "Цвет Фона",
+            "mainTextColorName": "Основной Цвет Текста",
+            "subtitleTextColorName": "Основной Цвет Подзаголовка",
+            "chooseColor": "Выберите %colorName%",
+            "chooseColorButton": "Выбрать этот цвет",
+            "chooseThemeName": "Выберите Название Темы",
+            "themeNameFieldLabel": "Название Темы",
+            "chooseThemeButton": "Выбрать это название",
+            "settings": "Настройки",
+            "themes": "Темы",
+            "greetings": "Здравствуйте, %username%",
+            "goalsOfToday": "Давайте что-нибудь сделаем!\nВаши цели на сегодня:",
+            "youHaveNoGoals": "У вас пока нет целей.\nНажмите кнопку ниже и создайте цель!",
+            "viewGoals": "Цели"
+        },
+    "goals":
+        {
+            "setNewGoal": "Создать новую цель",
+            "goalName": "Название цели",
+            "goalDescription": "Описание цели",
+            "createGoalButton": "Создать цель",
+            "addNewTask": "Добавить новую задачу:",
+            "shortTaskDescription": "Короткое описание задачи",
+            "deleteGoalButton": "Удалить цель",
+            "editGoalButton": "Редактировать цель",
+            "deleteTaskButton": "Удалить задачу",
+            "editTaskButton": "Редактировать задачу",
+            "addButton": "Добавить",
+            "taskDone": "Завершено",
+            "addFirstGoal": "Добавьте вашу первую цель, \nИ вы увидите её здесь!",
+            "goalDeleted": "Цель %goalName% удалена",
+            "taskDeleted": "Задача %taskName% удалена",
+            "snackbarUndo": "Отменить"
+        },
+    "settings":
+        {
+            "localizationTitle": "Язык",
+            "localizationSubtitle": "Язык интерфейса",
+            "infoTitle": "Информация",
+            "infoSubtitle": "Информация о приложении TODO",
+            "infoDialogTitle": "Приложение TODO",
+            "infoDialogClose": "Закрыть",
+            "infoDialogText": "Сделано Winely \nс использованием фреймворка Flutter\nВерсия приложения: %appVersion%\nНомер сборки: %buildVersion%"
+        }
+}

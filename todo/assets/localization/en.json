@@ -1,0 +1,55 @@
+{
+    "home":
+        {
+            "themeDeleted": "Theme %themeName% deleted",
+            "themeDeletedUndo": "UNDO",
+            "chooseTheme": "Choose a theme",
+            "createCustomTheme": "Create custom theme",
+            "mainColorName": "Main Color",
+            "mainShadeColorName": "Main Shade Color",
+            "secondaryColorName": "Secondary Color",
+            "backgroundColorName": "Background Color",
+            "mainTextColorName": "Main Text Color",
+            "subtitleTextColorName": "Subtitle Text Color",
+            "chooseColor": "Choose %colorName%",
+            "chooseColorButton": "Choose this color",
+            "chooseThemeName": "Choose a theme%apostrophe% name",
+            "themeNameFieldLabel": "Theme%apostrophe% name",
+            "chooseThemeButton": "Choose this name",
+            "settings": "Settings",
+            "themes": "Themes",
+            "greetings": "Hello, %username%",
+            "goalsOfToday": "Let%apostrophe% do something!\nHere%apostrophe% your goals of today:",
+            "youHaveNoGoals": "You have no goals now.\nPress the button below and set a new goal!",
+            "viewGoals": "View goals"
+        },
+    "goals":
+        {
+            "setNewGoal": "Set a new goal",
+            "goalName": "Goal name",
+            "goalDescription": "Goal description",
+            "createGoalButton": "Create goal",
+            "addNewTask": "Add a new task:",
+            "shortTaskDescription": "Short task description",
+            "deleteGoalButton": "Delete goal",
+            "editGoalButton": "Edit goal",
+            "deleteTaskButton": "Delete task",
+            "editTaskButton": "Edit task",
+            "addButton": "ADD",
+            "taskDone": "Done",
+            "addFirstGoal": "Add your first goal, \nand you will see it here!",
+            "goalDeleted": "Goal %goalName% deleted",
+            "taskDeleted": "Task %taskName% deleted",
+            "snackbarUndo": "UNDO"
+        },
+    "settings":
+        {
+            "localizationTitle": "Language",
+            "localizationSubtitle": "Language of interface",
+            "infoTitle": "About",
+            "infoSubtitle": "Info about TODO app",
+            "infoDialogTitle": "TODO App",
+            "infoDialogClose": "Close",
+            "infoDialogText": "Made with Flutter by Winely\nApp version: %appVersion%\nBuild number: %buildVersion%"
+        }
+}
