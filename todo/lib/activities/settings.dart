@@ -4,6 +4,8 @@ import 'package:todo/databaseService.dart';
 import 'package:todo/settingsItemWidget.dart';
 import 'package:todo/styles/TODOTheme.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:flutter/gestures.dart';
+import 'package:url_launcher/link.dart';
 
 class SettingsPanel extends StatefulWidget {
   const SettingsPanel({ Key? key }) : super(key: key);
@@ -35,8 +37,30 @@ class _SettingsPanelState extends State<SettingsPanel> {
             backgroundColor: theme.colorTable.backgroundColor,
             title: Text(user.localization["settings"]["infoDialogTitle"], style: theme.textStyles.bold20, textAlign: TextAlign.center,),
             children: [
-              //TODO: Add links and big icon here
-              Text(user.localization["settings"]["infoDialogText"].replaceAll("%appVersion%", packageInfo.version).replaceAll("%buildVersion%", packageInfo.buildNumber), style: theme.textStyles.normal18, textAlign: TextAlign.center),
+              Image(image: AssetImage("assets/images/info_icon.png"), width:200, height: 200),
+              Padding(padding: EdgeInsets.only(bottom: 10)),
+              Link(
+                uri: Uri.parse("https://github.com/NeTvoyBatya/todo"),
+                builder: (context, followLink){
+                  return RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: user.localization["settings"]["infoDialogText"].replaceAll("%appVersion%", packageInfo.version).replaceAll("%buildVersion%", packageInfo.buildNumber)+"\n",
+                          style: user.theme.textStyles.normal18),
+                        TextSpan(
+                          text: "GitHub",
+                          style: user.theme.textStyles.link18,
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = followLink
+                        )
+                      ]
+                    ),
+                  );
+                }
+              ),
+              Padding(padding: EdgeInsets.only(bottom: 10)),
               OutlinedButton(style: theme.widgetStyles.goalsDialogButton, onPressed: () {Navigator.pop(context);}, child: Text(user.localization["settings"]["infoDialogClose"], style: theme.textStyles.normal18))
             ],
           )
@@ -68,6 +92,7 @@ class _SettingsPanelState extends State<SettingsPanel> {
                   iconEnabledColor: theme.colorTable.secondaryColor,
                   dropdownColor: theme.colorTable.backgroundColor,
                   value: user.sharedPreferences.getString('localization'),
+                  underline: SizedBox(),
                   items: [
                     DropdownMenuItem(value: 'en', child: Text('English', style: theme.textStyles.normal18,)),
                     DropdownMenuItem(value: 'ru', child: Text('Русский', style: theme.textStyles.normal18,)),

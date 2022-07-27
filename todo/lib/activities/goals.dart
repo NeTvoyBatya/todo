@@ -20,6 +20,7 @@ class _GoalsPanelState extends State<GoalsPanel> {
   late TODOTheme theme;
   int? expandedGoalIndex;
   List<Goal>? allGoalsList;
+  int navigationIndex = 0;
 
 
   void loadUserGoals() async{
@@ -348,6 +349,24 @@ class _GoalsPanelState extends State<GoalsPanel> {
     });
   }
 
+  void moveToActivity(int page){
+    if (this.navigationIndex == page) {
+      return;
+    }
+  switch (page) {
+    case 0:
+      Navigator.pushReplacementNamed(context, '/goals', arguments: {'user': this.user, 'db': db});
+      break;
+    case 1:
+      Navigator.pushReplacementNamed(context, '/home', arguments: {'user': this.user, 'db': db});
+      break;
+    case 2:
+      Navigator.pushReplacementNamed(context, '/schedule', arguments: {'user': this.user, 'db': db});
+      break;
+  }
+}
+
+
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Map;
@@ -362,21 +381,33 @@ class _GoalsPanelState extends State<GoalsPanel> {
     List<Goal>? goalsList = this.allGoalsList;
     if(goalsList != null && goalsList.isNotEmpty){
       return Scaffold(
-      backgroundColor: theme.colorTable.backgroundColor,
-      appBar: AppBar(title: Text('TODO', style: theme.textStyles.bold24,), backgroundColor: theme.colorTable.mainColor,),
-      body:
-        Align(
+        floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
+        backgroundColor: theme.colorTable.backgroundColor,
+        appBar: AppBar(
+          title: Text('TODO', style: theme.textStyles.bold24,),
+          backgroundColor: theme.colorTable.mainColor,
+          actions: [
+            IconButton(onPressed: newGoal, icon: Icon(Icons.add_circle_outline), color: user.theme.colorTable.mainTextColor)
+          ]
+        ),
+        body:
+          Align(
             alignment: Alignment.topCenter,
             child:
-              SingleChildScrollView(
-                child:colored.ColoredExpansionPanelList(
-                    color: theme.colorTable.secondaryColor,
-                    expansionCallback: this.expansionPanelListCallback,
-                    children: this.allGoalsList!.mapIndexed<colored.ExpansionPanel>((int goalIndex, Goal goal) {
-                      return colored.ExpansionPanel(
-                        backgroundColor: theme.colorTable.backgroundColor,
-                        headerBuilder: (BuildContext context, bool isExpanded){
-                          return InkWell(
+              ScrollConfiguration(
+                behavior: ScrollBehavior(),
+                child: GlowingOverscrollIndicator(
+                  axisDirection: AxisDirection.down,
+                  color: user.theme.colorTable.mainShadeColor,
+                  child: SingleChildScrollView(
+                    child: colored.ColoredExpansionPanelList(
+                      color: theme.colorTable.secondaryColor,
+                      expansionCallback: this.expansionPanelListCallback,
+                      children: this.allGoalsList!.mapIndexed<colored.ExpansionPanel>((int goalIndex, Goal goal) {
+                        return colored.ExpansionPanel(
+                          backgroundColor: theme.colorTable.backgroundColor,
+                          headerBuilder: (BuildContext context, bool isExpanded){
+                            return InkWell(
                               onLongPress: () {goalLongPress(goalIndex);},
                               onTap: () {this.expansionPanelListCallback(goalIndex, isExpanded);},
                               child: Column(
@@ -393,63 +424,107 @@ class _GoalsPanelState extends State<GoalsPanel> {
                                           color: theme.colorTable.secondaryColor,
                                           value: goal.getProgress(),
                                         ),Padding(padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0)),
-                                        
                                       ],
                                     )
                                   )
                                 ],
-                                ),
+                              ),
                             );
-                        },
-                        body: ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: goal.tasks.length+1,
-                          itemBuilder: (BuildContext context, int taskIndex){
-                            return taskIndex == goal.tasks.length?
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child:
-                                ListTile(
-                                  leading: Icon(Icons.add_task, color: theme.colorTable.mainColor,),
-                                  title: Text(user.localization["goals"]["addNewTask"], style: theme.textStyles.normal18),
-                                  trailing: OutlinedButton(onPressed: () {newTask(goalIndex);}, style: theme.widgetStyles.taskDoneButton, child: Text(user.localization["goals"]["addButton"], style: theme.textStyles.normal16,)),
-                                )
-                              ):
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child:
-                                ListTile(
-                                  onLongPress: () {taskLongPress(goalIndex, taskIndex);},
-                                  leading: goal.tasks[taskIndex].isDone ? Icon(Icons.done, color: theme.colorTable.mainColor,): Icon(Icons.construction, color: theme.colorTable.mainColor,),
-                                  title: Text(goal.tasks[taskIndex].desc, style: theme.textStyles.normal18),
-                                  trailing: OutlinedButton(onPressed: () {taskDone(goalIndex, taskIndex);}, style: theme.widgetStyles.taskDoneButton, child: Text(user.localization["goals"]["taskDone"], style: theme.textStyles.normal16,)),
-                                )
-                              );
-                          }),
-                      isExpanded: goalIndex==this.expandedGoalIndex
-                      );
-                    }).toList(),
+                          },
+                          body: ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: goal.tasks.length+1,
+                            itemBuilder: (BuildContext context, int taskIndex){
+                              return taskIndex == goal.tasks.length?
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: ListTile(
+                                    leading: Icon(Icons.add_task, color: theme.colorTable.mainColor,),
+                                    title: Text(user.localization["goals"]["addNewTask"], style: theme.textStyles.normal18),
+                                    trailing: OutlinedButton(onPressed: () {newTask(goalIndex);}, style: theme.widgetStyles.taskDoneButton, child: Text(user.localization["goals"]["addButton"], style: theme.textStyles.normal16,)),
+                                  )
+                                ):
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: ListTile(
+                                    onLongPress: () {taskLongPress(goalIndex, taskIndex);},
+                                    leading: goal.tasks[taskIndex].isDone ? Icon(Icons.done, color: theme.colorTable.mainColor,): Icon(Icons.construction, color: theme.colorTable.mainColor,),
+                                    title: Text(goal.tasks[taskIndex].desc, style: theme.textStyles.normal18),
+                                    trailing: OutlinedButton(onPressed: () {taskDone(goalIndex, taskIndex);}, style: theme.widgetStyles.taskDoneButton, child: Text(user.localization["goals"]["taskDone"], style: theme.textStyles.normal16,)),
+                                  )
+                                );
+                            }),
+                          isExpanded: goalIndex==this.expandedGoalIndex
+                        );
+                      }).toList(),
+                    )
+                  ),
                 )
-            )
+              )
           ),
-        floatingActionButton: 
-          FloatingActionButton(
-            backgroundColor: theme.colorTable.mainColor,
-            onPressed: () {newGoal();},
-            child: Icon(Icons.add, color: theme.colorTable.secondaryColor,),
-          ),
-        );
-  }else{
+        bottomNavigationBar: BottomNavigationBar(
+          elevation: 10.0,
+          unselectedItemColor: user.theme.colorTable.mainTextColor,
+          selectedItemColor: user.theme.colorTable.secondaryColor,
+          backgroundColor: this.user.theme.colorTable.mainColor,
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.first_page),
+              label: user.localization["navbar"]["goalsLabel"],
+              backgroundColor: Colors.blue
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: user.localization["navbar"]["homeLabel"],
+              backgroundColor: Colors.red
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.last_page),
+              label: user.localization["navbar"]["scheduleLabel"],
+              backgroundColor: Colors.pink
+            ),
+          ],
+          currentIndex: this.navigationIndex,
+          onTap: moveToActivity,
+        ),
+      );
+    }else{
       return Scaffold(
-      backgroundColor: theme.colorTable.backgroundColor,
-      appBar: AppBar(title: Text('TODO', style: theme.textStyles.bold24,), backgroundColor: theme.colorTable.mainColor),
-      body: Center(child: Text(user.localization["goals"]["addFirstGoal"], style: this.theme.textStyles.normal20, textAlign: TextAlign.center,)),
-      floatingActionButton: 
-          FloatingActionButton(
-            onPressed: () {newGoal();},
-            child: Icon(Icons.add),
-          ),
+        backgroundColor: theme.colorTable.backgroundColor,
+        appBar: AppBar(
+          title: Text('TODO', style: theme.textStyles.bold24,),
+          backgroundColor: theme.colorTable.mainColor,
+          actions: [
+            IconButton(onPressed: newGoal, icon: Icon(Icons.add_circle_outline), color: user.theme.colorTable.mainTextColor)
+          ]
+        ),
+        body: Center(child: Text(user.localization["goals"]["addFirstGoal"], style: this.theme.textStyles.normal20, textAlign: TextAlign.center,)),
+        bottomNavigationBar: BottomNavigationBar(
+          elevation: 10.0,
+          unselectedItemColor: user.theme.colorTable.mainTextColor,
+          selectedItemColor: user.theme.colorTable.secondaryColor,
+          backgroundColor: this.user.theme.colorTable.mainColor,
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.first_page),
+              label: user.localization["navbar"]["goalsLabel"],
+              backgroundColor: Colors.blue
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: user.localization["navbar"]["homeLabel"],
+              backgroundColor: Colors.red
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.last_page),
+              label: user.localization["navbar"]["scheduleLabel"],
+              backgroundColor: Colors.pink
+            ),
+          ],
+          currentIndex: this.navigationIndex,
+          onTap: moveToActivity,
+        ),
       );
     }
   }

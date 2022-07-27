@@ -1,4 +1,11 @@
+import 'dart:convert';
 import 'dart:math';
+import 'package:intl/intl.dart';
+
+String zeroPadded(String string){
+  string="00"+string;
+  return string.substring(string.length-2);
+}
 
 extension TasksParsing on String{
   List<Task> parseTasks(){
@@ -120,4 +127,92 @@ class Goal{
   String toString(){
     return 'Goal by name $name have ${tasks.length} tasks and is ${isDone? 'done': 'not done'}';
   }
+}
+
+class DailyTask{
+  late String name;
+  late bool isEveryday;
+  late int doneTime;
+  late String forDay;
+  late int id;
+  late int showIndex;
+
+  DailyTask({required this.name, this.isEveryday=true, this.doneTime=0, this.forDay="None", this.showIndex=0});
+
+  Map<String, dynamic> toMap(){
+    return {'name': this.name, 'isEveryday': this.isEveryday? 1:0, 'doneTime': this.doneTime,
+            'forDay': this.forDay, 'showIndex': this.showIndex
+           };
+  }
+
+  DailyTask.fromMap(Map<dynamic, dynamic> dbMap){
+    this.name = dbMap["name"];
+    this.isEveryday = dbMap["isEveryday"] == 1;
+    this.doneTime = dbMap["doneTime"];
+    this.forDay = dbMap["forDay"];
+    this.id = dbMap["id"];
+    this.showIndex = dbMap["showIndex"];
+  }
+
+  void done(){
+    this.doneTime = DateTime.now().millisecondsSinceEpoch;
+  }
+
+  bool available(){
+    if(this.isEveryday){
+      return true;
+    }
+    Map<String, dynamic>forDay = jsonDecode(this.forDay);
+    String type = forDay["type"];
+    DateTime now = DateTime.now();
+    switch (type) {
+      case "oneday":
+        String dateString = forDay["date"];
+        return "${zeroPadded(now.day.toString())}.${zeroPadded(now.month.toString())}.${now.year}" == dateString? true : false;
+      case "weekdays":
+        List<int> activeDays = forDay["days"].cast<int>();
+        return activeDays.contains(now.weekday-1);
+      default:
+        return false;
+    }}
+
+  bool isDoneToday(){
+    DateTime done = DateTime.fromMillisecondsSinceEpoch(this.doneTime).toLocal();
+    DateTime now = DateTime.now().toLocal();
+
+    if (done.year == now.year && done.month == now.month && done.day == now.day){
+      return true;
+    }
+    //done.year < now.year || (done.year == now.year && done.month < now.month) || (done.year == now.year && done.month == now.month && done.day < now.day)
+    return false;
+  }
+
+  String nextAvailableTime(Map<String, dynamic> localization){
+    String type = jsonDecode(this.forDay)["type"];
+    switch (type) {
+      case "oneday":
+      String weekday = localization['schedule']['longWeekdays'][DateFormat("d.M.y").parse(jsonDecode(this.forDay)["date"]).weekday-1];
+        return localization["schedule"]["taskWillBeAvailable"]+jsonDecode(this.forDay)["date"]+" (${weekday})";
+      case "weekdays":
+        List<int> remainingWeek = [for (int i = DateTime.now().weekday+1; i < 7; i+=1) i];
+        List<int> activeWeekdays = jsonDecode(this.forDay)["days"].cast<int>();
+        for (int day in remainingWeek){
+          if (activeWeekdays.contains(day)){
+            DateTime nextDate = DateTime.now().add(Duration(days: day+1-DateTime.now().weekday));
+            return localization["schedule"]["taskWillBeAvailable"]+localization["schedule"]["longWeekdays"][day]+" (${zeroPadded(nextDate.day.toString())}.${zeroPadded(nextDate.month.toString())}.${nextDate.year.toString().substring(2)})";
+          }
+        }
+        int nextDay = activeWeekdays[0];
+        DateTime nextDate = DateTime.now().add(Duration(days: 7-DateTime.now().weekday+activeWeekdays[0]+1));
+        return localization["schedule"]["taskWillBeAvailable"]+localization["schedule"]["longWeekdays"][nextDay]+" (${zeroPadded(nextDate.day.toString())}.${zeroPadded(nextDate.month.toString())}.${nextDate.year.toString().substring(2)})";
+      default:
+        return "Undefined";
+    }
+  }
+
+   @override
+  String toString(){
+    return '(${this.id}) Task by name $name, IsEveryday: ${isEveryday}, Type: ${jsonDecode(forDay)['type']}';
+  }
+
 }

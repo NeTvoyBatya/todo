@@ -96,9 +96,12 @@ class _LoadingPanelState extends State<LoadingPanel> {
     try{
       Future<Database> future = openDatabase(
         join(await getDatabasesPath(), 'todo_goals.db'),
-        onCreate: (db, version) {
+        onOpen: (db) {
           db.execute(
-            'CREATE TABLE goals(id INTEGER PRIMARY KEY, name TEXT, desc TEXT, tasks TEXT, isDone INTEGER)',
+            'CREATE TABLE IF NOT EXISTS goals(id INTEGER PRIMARY KEY, name TEXT, desc TEXT, tasks TEXT, isDone INTEGER)',
+          );
+          db.execute(
+            'CREATE TABLE IF NOT EXISTS schedule(id INTEGER PRIMARY KEY, name TEXT, isEveryday INTEGER, doneTime INTEGER, forDay TEXT, showIndex INTEGER)',
           );
         },
         version: 1,
@@ -120,13 +123,7 @@ class _LoadingPanelState extends State<LoadingPanel> {
       sharedPreferences.setString('localization', 'en');
       loc = 'en';
     }
-    Map<String, dynamic> unformatedLocalization = jsonDecode(await rootBundle.loadString('assets/localization/$loc.json'));
-    unformatedLocalization.forEach((screenKey, screen) {
-      screen.forEach((key, text){
-        unformatedLocalization[screenKey][key] = text.replaceAll('%apostrophe%', '\'s');
-      });
-     });
-    this.localization = unformatedLocalization;
+    this.localization = jsonDecode(await rootBundle.loadString('assets/localization/$loc.json'));
     this.loadingState['localizationState'] = true;
   }
 

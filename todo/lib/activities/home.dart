@@ -25,6 +25,7 @@ class _HomePanelState extends State<HomePanel> {
   List<TODOTheme> customThemes = [];
   List<Goal>? randomGoalsList;
   int goals = 0;
+  int navigationIndex = 1;
 
   void viewGoalsScreen(){
     Navigator.pushNamed(context, '/goals', arguments: {'user': this.user, 'db': db});
@@ -156,21 +157,28 @@ class _HomePanelState extends State<HomePanel> {
                 Container(
                   width: double.maxFinite,
                   height: 250.0,
-                  child: ListView.builder(itemCount: defaultThemes.length+customThemes.length+1,itemBuilder: (BuildContext context, int index){
-                    return index < defaultThemes.length ?
-                    ListTile(
-                      title: OutlinedButton(style: theme.widgetStyles.taskDoneButton, onPressed: () {setTheme(defaultThemes[index]);}, child: Text(defaultThemes[index].name, style: theme.textStyles.normal18,)),
-                      subtitle: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(Icons.circle, color:  defaultThemes[index].colorTable.mainColor), Icon(Icons.circle, color:  defaultThemes[index].colorTable.mainTextColor), Icon(Icons.circle, color:  defaultThemes[index].colorTable.secondaryColor)],),
-                    ):
-                    index>(defaultThemes.length+customThemes.length)-1?
-                    ListTile(
-                      title: OutlinedButton(style: theme.widgetStyles.taskDoneButton, onPressed: () {createCustomTheme();}, child: Text(user.localization["home"]["createCustomTheme"], style: theme.textStyles.normal18,)), 
-                    ):
-                    ListTile(
-                      title: OutlinedButton(style: theme.widgetStyles.taskDoneButton, onPressed: () {setTheme(customThemes[index-defaultThemes.length]);}, onLongPress: () {deleteTheme(index-defaultThemes.length);}, child: Text(customThemes[index-defaultThemes.length].name, style: theme.textStyles.normal18,)),
-                      subtitle: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(Icons.circle, color:  customThemes[index-defaultThemes.length].colorTable.mainColor), Icon(Icons.circle, color:  customThemes[index-defaultThemes.length].colorTable.mainTextColor), Icon(Icons.circle, color:  customThemes[index-defaultThemes.length].colorTable.secondaryColor)],),
-                    );
-                  }),
+                  child: ScrollConfiguration(
+                    behavior: ScrollBehavior(),
+                    child: GlowingOverscrollIndicator(
+                      axisDirection: AxisDirection.down,
+                      color: user.theme.colorTable.mainShadeColor,
+                      child: ListView.builder(itemCount: defaultThemes.length+customThemes.length+1,itemBuilder: (BuildContext context, int index){
+                        return index < defaultThemes.length ?
+                        ListTile(
+                          title: OutlinedButton(style: theme.widgetStyles.taskDoneButton, onPressed: () {setTheme(defaultThemes[index]);}, child: Text(defaultThemes[index].name, style: theme.textStyles.normal18,)),
+                          subtitle: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(Icons.circle, color:  defaultThemes[index].colorTable.mainColor), Icon(Icons.circle, color:  defaultThemes[index].colorTable.mainTextColor), Icon(Icons.circle, color:  defaultThemes[index].colorTable.secondaryColor)],),
+                        ):
+                        index>(defaultThemes.length+customThemes.length)-1?
+                        ListTile(
+                          title: OutlinedButton(style: theme.widgetStyles.taskDoneButton, onPressed: () {createCustomTheme();}, child: Text(user.localization["home"]["createCustomTheme"], style: theme.textStyles.normal18,)), 
+                        ):
+                        ListTile(
+                          title: OutlinedButton(style: theme.widgetStyles.taskDoneButton, onPressed: () {setTheme(customThemes[index-defaultThemes.length]);}, onLongPress: () {deleteTheme(index-defaultThemes.length);}, child: Text(customThemes[index-defaultThemes.length].name, style: theme.textStyles.normal18,)),
+                          subtitle: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(Icons.circle, color:  customThemes[index-defaultThemes.length].colorTable.mainColor), Icon(Icons.circle, color:  customThemes[index-defaultThemes.length].colorTable.mainTextColor), Icon(Icons.circle, color:  customThemes[index-defaultThemes.length].colorTable.secondaryColor)],),
+                        );
+                      }),
+                    ),
+                  )
                 )
                 
               ],
@@ -182,6 +190,8 @@ class _HomePanelState extends State<HomePanel> {
         return;
     }
   }
+
+
 
   void createCustomTheme() async{
     List<Map<String, dynamic>> colors = [
@@ -262,6 +272,22 @@ class _HomePanelState extends State<HomePanel> {
     return this.buildHomeScreen();
     
   }
+  void moveToActivity(int page){
+    if (this.navigationIndex == page) {
+      return;
+    }
+  switch (page) {
+    case 0:
+      Navigator.pushReplacementNamed(context, '/goals', arguments: {'user': this.user, 'db': db});
+      break;
+    case 1:
+      Navigator.pushReplacementNamed(context, '/home', arguments: {'user': this.user, 'db': db});
+      break;
+    case 2:
+      Navigator.pushReplacementNamed(context, '/schedule', arguments: {'user': this.user, 'db': db});
+      break;
+  }
+}
 
   Scaffold buildHomeScreen(){
     if(this.randomGoalsList != null){
@@ -276,7 +302,7 @@ class _HomePanelState extends State<HomePanel> {
             onSelected: popupSelected,
             shape: theme.widgetStyles.popupMenuBorder,
             color: theme.colorTable.backgroundColor,
-            icon: Icon(Icons.more_vert, color: theme.colorTable.secondaryColor),
+            icon: Icon(Icons.more_vert, color: theme.colorTable.mainTextColor),
             itemBuilder:(context) =>
               [
                 PopupMenuItem(value: 1, child: Text(user.localization["home"]["settings"], style: theme.textStyles.normal18,)),
@@ -288,6 +314,31 @@ class _HomePanelState extends State<HomePanel> {
         ),
           
       backgroundColor: theme.colorTable.backgroundColor,
+      bottomNavigationBar: BottomNavigationBar(
+        elevation: 10.0,
+        unselectedItemColor: user.theme.colorTable.mainTextColor,
+        selectedItemColor: user.theme.colorTable.secondaryColor,
+        backgroundColor: this.user.theme.colorTable.mainColor,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.first_page),
+            label: user.localization["navbar"]["goalsLabel"],
+            backgroundColor: Colors.blue
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: user.localization["navbar"]["homeLabel"],
+            backgroundColor: Colors.red
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.last_page),
+            label: user.localization["navbar"]["scheduleLabel"],
+            backgroundColor: Colors.pink
+          ),
+        ],
+      currentIndex: this.navigationIndex,
+      onTap: moveToActivity,
+      ),
       
       body:
         Align(
@@ -322,15 +373,7 @@ class _HomePanelState extends State<HomePanel> {
                         subtitle: Text(randomGoalsList![index].getRandomTask().desc, style: theme.textStyles.subTitle12, textAlign: TextAlign.left, maxLines: 1, overflow: TextOverflow.ellipsis,),
                         ));}
                       )),
-                    ),         
-                Flexible(
-                  child: 
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: OutlinedButton(style: theme.widgetStyles.viewGoalsButton, onPressed: viewGoalsScreen, child: Text(user.localization["home"]["viewGoals"], style: theme.textStyles.normal20),),
-                    ),     
-                ),
-                Padding(padding: EdgeInsets.only(bottom: 20))           
+                    ),                
               ]
             )
           )
@@ -347,7 +390,7 @@ class _HomePanelState extends State<HomePanel> {
             onSelected: popupSelected,
             shape: theme.widgetStyles.popupMenuBorder,
             color: theme.colorTable.backgroundColor,
-            icon: Icon(Icons.more_vert, color: theme.colorTable.secondaryColor),
+            icon: Icon(Icons.more_vert, color: theme.colorTable.mainTextColor),
             itemBuilder:(context) =>
               [
                 PopupMenuItem(value: 1, child: Text(user.localization["home"]["settings"], style: theme.textStyles.normal18,)),
@@ -371,18 +414,35 @@ class _HomePanelState extends State<HomePanel> {
                   radius: 50,),
                 Padding(padding: EdgeInsets.only(top: 50)),
                 Text(user.localization["home"]["youHaveNoGoals"], textAlign: TextAlign.center, style: theme.textStyles.normal24,),
-                Padding(padding: EdgeInsets.only(top: 210)),        
-                Flexible(
-                  child: 
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: OutlinedButton(onPressed: viewGoalsScreen, child: Text(user.localization["home"]["viewGoals"], style: theme.textStyles.normal20), style: theme.widgetStyles.viewGoalsButton,),
-                    ),     
-                ),
-                Padding(padding: EdgeInsets.only(bottom: 20))           
+                Padding(padding: EdgeInsets.only(top: 210)),      
               ]
             )
-          )
+          ),
+      bottomNavigationBar: BottomNavigationBar(
+        elevation: 10.0,
+        unselectedItemColor: user.theme.colorTable.mainTextColor,
+        selectedItemColor: user.theme.colorTable.secondaryColor,
+        backgroundColor: this.user.theme.colorTable.mainColor,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.first_page),
+            label: user.localization["navbar"]["goalsLabel"],
+            backgroundColor: Colors.blue
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: user.localization["navbar"]["homeLabel"],
+            backgroundColor: Colors.red
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.last_page),
+            label: user.localization["navbar"]["scheduleLabel"],
+            backgroundColor: Colors.pink
+          ),
+        ],
+      currentIndex: this.navigationIndex,
+      onTap: moveToActivity,
+      )
     );
     }
   }

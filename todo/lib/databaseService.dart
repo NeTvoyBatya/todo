@@ -16,6 +16,15 @@ class DatabaseService {
     return goalsList;
   }
 
+  Future<List<DailyTask>> getAllDailyTasks() async{
+    List<DailyTask> tasksList = [];
+    List<Map> tasksMaps = await db.query('schedule');
+    tasksMaps.forEach((map) {
+      tasksList.add(DailyTask.fromMap(map));
+    });
+    return tasksList;
+  }  
+
   Future<List<Goal>?> getRandomGoals() async{
     List<Map> goalsList = await this.db.query('goals');
     if(goalsList.length == 1){
@@ -38,24 +47,30 @@ class DatabaseService {
     return this.db.insert('goals', goal.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
+  Future<int> insertDailyTask(DailyTask task) async{
+    return this.db.insert('schedule', task.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<bool> updateDailyTask(DailyTask task) async{
+    int updatedRows = await this.db.update('schedule', task.toMap(), where: 'id=?', whereArgs: [task.id]);
+    return updatedRows > 0;
+  }
+
+  Future<bool> deleteDailyTask(DailyTask task) async{
+    int updatetRows = await this.db.delete('schedule', where: 'id=?', whereArgs: [task.id]);
+    return updatetRows > 0;
+  }
+
   Future<bool> deleteGoal(int index) async{
-    int deletedRows = await this.db.delete('goals', where: 'id=?', whereArgs: [index]);
-    if(deletedRows > 0 ){
-      return true;
-    }else{
-      return false;
-    }
+    int updatedRows = await this.db.delete('goals', where: 'id=?', whereArgs: [index]);
+    return updatedRows > 0;
   }
 
   Future<bool> deleteTask(int goalIndex, int taskIndex) async{
     Goal goal = Goal.fromMap(await this.getGoal(goalIndex));
     goal.tasks.removeAt(taskIndex);
     int updatedRows = await this.db.update('goals', goal.toMap(), where: 'id=?', whereArgs: [goalIndex]);
-    if(updatedRows > 0){
-      return true;
-    }else{
-      return false;
-    }
+    return updatedRows > 0;
   }
 
   Future<bool> editGoal(int index, String newName, String newDesc) async{
@@ -63,43 +78,27 @@ class DatabaseService {
     goal.name = newName;
     goal.desc = newDesc;
     int updatedRows = await this.db.update('goals', goal.toMap(), where: 'id=?', whereArgs: [index]);
-    if(updatedRows > 0){
-      return true;
-    }else{
-      return false;
-    }
+    return updatedRows > 0;
   }
 
   Future<bool> editTask(int goalIndex, int taskIndex,  String newDesc) async{
     Goal goal = Goal.fromMap(await this.getGoal(goalIndex));
     goal.tasks[taskIndex].desc = newDesc;
     int updatedRows = await this.db.update('goals', goal.toMap(), where: 'id=?', whereArgs: [goalIndex]);
-    if(updatedRows > 0){
-      return true;
-    }else{
-      return false;
-    }
+    return updatedRows > 0;
   }
 
   Future<bool> taskDone(int goalIndex, int taskIndex) async{
     Goal goal = Goal.fromMap(await this.getGoal(goalIndex));
     goal.taskDone(taskIndex);
     int updatedRows = await this.db.update('goals', goal.toMap(), where: 'id=?', whereArgs: [goalIndex]);
-    if(updatedRows > 0){
-      return true;
-    }else{
-      return false;
-    }
+    return updatedRows > 0;
   }
 
   Future<bool> addTask(int index, String task, {bool isDone=false}) async{
     Goal goal = Goal.fromMap(await this.getGoal(index));
     goal.newTask(task, isDone: isDone);
     int updatedRows = await this.db.update('goals', goal.toMap(), where: 'id=?', whereArgs: [index]);
-    if(updatedRows > 0){
-      return true;
-    }else{
-      return false;
-    }
+    return updatedRows > 0;
   }
 }

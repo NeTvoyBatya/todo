@@ -13,15 +13,14 @@
             "subtitleTextColorName": "Subtitle Text Color",
             "chooseColor": "Choose %colorName%",
             "chooseColorButton": "Choose this color",
-            "chooseThemeName": "Choose a theme%apostrophe% name",
-            "themeNameFieldLabel": "Theme%apostrophe% name",
+            "chooseThemeName": "Choose a theme's name",
+            "themeNameFieldLabel": "Theme's name",
             "chooseThemeButton": "Choose this name",
             "settings": "Settings",
             "themes": "Themes",
             "greetings": "Hello, %username%",
-            "goalsOfToday": "Let%apostrophe% do something!\nHere%apostrophe% your goals of today:",
-            "youHaveNoGoals": "You have no goals now.\nPress the button below and set a new goal!",
-            "viewGoals": "View goals"
+            "goalsOfToday": "Let's do something!\nHere's your goals of today:",
+            "youHaveNoGoals": "You have no goals now.\nPress the button below and set a new goal!"
         },
     "goals":
         {
@@ -51,5 +50,30 @@
             "infoDialogTitle": "TODO App",
             "infoDialogClose": "Close",
             "infoDialogText": "Made with Flutter by Winely\nApp version: %appVersion%\nBuild number: %buildVersion%"
+        },
+    "navbar":
+        {
+            "goalsLabel": "Goals",
+            "homeLabel": "Home",
+            "scheduleLabel": "Schedule"
+        },
+    "schedule":
+        {
+            "addDaily": "Add new daily task",
+            "dailyName": "Your task",
+            "addDailyButton": "Add task",
+            "doneSubtitle": "Done at %time%",
+            "everydayTask": "Everyday",
+            "tomorrowTask": "Only Tomorrow",
+            "weekdaysTask": "Days of the week",
+            "onedayTask": "Certain day",
+            "shortWeekdays": ["M", "T", "W", "T", "F", "S", "S"],
+            "longWeekdays": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+            "dtPickerCancel": "Cancel",
+            "dtPickerHelp": "SELECT DATE",
+            "activeTasksHeader": "Active Tasks",
+            "inactiveTasksHeader": "Inactive Tasks",
+            "taskWillBeAvailable": "Will be available at ",
+            "noDailyTasks": "You have no tasks in your schedule right now"
         }
 }

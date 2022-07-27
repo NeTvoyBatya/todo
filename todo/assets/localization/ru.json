@@ -20,8 +20,7 @@
             "themes": "Темы",
             "greetings": "Здравствуйте, %username%",
             "goalsOfToday": "Давайте что-нибудь сделаем!\nВаши цели на сегодня:",
-            "youHaveNoGoals": "У вас пока нет целей.\nНажмите кнопку ниже и создайте цель!",
-            "viewGoals": "Цели"
+            "youHaveNoGoals": "У вас пока нет целей.\nНажмите кнопку ниже и создайте цель!"
         },
     "goals":
         {
@@ -36,7 +35,7 @@
             "deleteTaskButton": "Удалить задачу",
             "editTaskButton": "Редактировать задачу",
             "addButton": "Добавить",
-            "taskDone": "Завершено",
+            "taskDone": "Завершить",
             "addFirstGoal": "Добавьте вашу первую цель, \nИ вы увидите её здесь!",
             "goalDeleted": "Цель %goalName% удалена",
             "taskDeleted": "Задача %taskName% удалена",
@@ -51,5 +50,30 @@
             "infoDialogTitle": "Приложение TODO",
             "infoDialogClose": "Закрыть",
             "infoDialogText": "Сделано Winely \nс использованием фреймворка Flutter\nВерсия приложения: %appVersion%\nНомер сборки: %buildVersion%"
+        },
+    "navbar":
+        {
+            "goalsLabel": "Цели",
+            "homeLabel": "Главная",
+            "scheduleLabel": "Распорядок"
+        },
+    "schedule":
+        {
+            "addDaily": "Добавить задачу в график",
+            "dailyName": "Задача",
+            "addDailyButton": "Добавить задачу",
+            "doneSubtitle": "Завершено в %time%",
+            "everydayTask": "Каждый день",
+            "tomorrowTask": "Только завтра",
+            "weekdaysTask": "Дни недели",
+            "onedayTask": "Один день",
+            "shortWeekdays": ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"],
+            "longWeekdays": ["в Понедельник", "во Вторник", "в Среду", "в Четверг", "в Пятницу", "в Субботу", "в Воскресенье"],
+            "dtPickerCancel": "Отмена",
+            "dtPickerHelp": "ВЫБЕРИТЕ ДАТУ",
+            "activeTasksHeader": "Доступные задачи",
+            "inactiveTasksHeader": "Неактивные задачи",
+            "taskWillBeAvailable": "Будет доступна ",
+            "noDailyTasks": "В вашем распорядке дня пока нет ни одного пункта."
         }
 }

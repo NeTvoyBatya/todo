@@ -17,6 +17,9 @@ abstract class TextStyles{
   abstract TextStyle subTitle16;
   abstract TextStyle subTitle14;
   abstract TextStyle subTitle12;
+  abstract TextStyle link14;
+  abstract TextStyle link16;
+  abstract TextStyle link18;
 
   void loadStyles();
 
@@ -69,6 +72,10 @@ class DefaultTextStyles extends TextStyles{
   late TextStyle subTitle16;
   late TextStyle subTitle14;
   late TextStyle subTitle12;
+  late TextStyle link14;
+  late TextStyle link16;
+  late TextStyle link18;
+
 
   DefaultTextStyles(this.colorTable) : super(colorTable);
 
@@ -171,6 +178,30 @@ class DefaultTextStyles extends TextStyles{
       fontSize: 12,
       fontWeight: FontWeight.normal,
       color: colorTable.subtitleTextColor,
+    );
+
+    this.link14 = TextStyle(
+      fontFamily: 'Baloo2',
+      fontSize: 14,
+      fontWeight: FontWeight.normal,
+      color: colorTable.secondaryColor,
+      decoration: TextDecoration.underline
+    );
+
+    this.link16 = TextStyle(
+      fontFamily: 'Baloo2',
+      fontSize: 16,
+      fontWeight: FontWeight.normal,
+      color: colorTable.secondaryColor,
+      decoration: TextDecoration.underline
+    );
+
+    this.link18 = TextStyle(
+      fontFamily: 'Baloo2',
+      fontSize: 18,
+      fontWeight: FontWeight.normal,
+      color: colorTable.secondaryColor,
+      decoration: TextDecoration.underline
     );
   }
   
